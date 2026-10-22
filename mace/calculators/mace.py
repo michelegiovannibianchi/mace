@@ -562,7 +562,7 @@ class MACECalculator(Calculator):
                 dtype=out[key].dtype,
             )
 
-        for key in ("latent_alphas", "latent_kappas", "BEC"):
+        for key in ("latent_alphas", "latent_kappas","latent_charges", "BEC"):
             if out.get(key) is not None:
                 dict_of_tensors[key] = torch.zeros(
                     num_models,
@@ -900,6 +900,10 @@ class MACECalculator(Calculator):
         if "latent_kappas" in ret_tensors:
             self.results["LES_kappas"] = (
                 torch.mean(ret_tensors["latent_kappas"], dim=0).cpu().numpy()
+            )
+        if "latent_charges" in ret_tensors:
+            self.results["LES_charges"] = (
+                torch.mean(ret_tensors["latent_charges"], dim=0).cpu().numpy()
             )
         if getattr(self, "compute_bec", False) and "BEC" in ret_tensors:
             self.results["bec"] = torch.mean(ret_tensors["BEC"], dim=0).cpu().numpy()
